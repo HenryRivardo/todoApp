@@ -1,1 +1,15 @@
 @import './base';
+// src/scss/globals.scss
+@import './variables';
+@import './functions';
+@import './_shared';
+@import './variables/_colors';
+@import './variables/_fonts';
+// @import './variables/_shared';
+@import './base/_reset';
+@import './base/_fontFamily';
+@import './base/_general';
+@import './functions/_rem-calc';
+@import '@/components/AddTodo/AddTodo.module.scss';
+@import '@/components/TodoList/TodoList.module.scss';
+@import '@/components/Header/Header.module.scss';

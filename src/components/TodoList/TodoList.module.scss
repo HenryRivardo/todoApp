@@ -1,0 +1,60 @@
+// src/components/TodoList.module.scss
+.todo-list-container {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+
+  .todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &__checkbox {
+      margin-right: 1rem;
+    }
+
+    &__text {
+      flex: 1;
+      font-size: 1rem;
+
+      &--completed {
+        text-decoration: line-through;
+        color: #999;
+      }
+    }
+
+    &__delete {
+      background: none;
+      border: none;
+      color: red;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .todo-list__load-more {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #5a099d;
+    }
+  }
+}
