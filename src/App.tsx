@@ -1,8 +1,7 @@
-// src/App.tsx
 import React from 'react';
 import TodoList from './components/TodoList/TodoList';
 import AddTodo from './components/AddTodo/AddTodo';
-// src/main.tsx
+
 import './scss/globals.scss';
 import Header from './components/Header/Header';
 
@@ -15,5 +14,7 @@ const App: React.FC = () => {
     </div>
   );
 };
+console.log('Base URL (from App):', import.meta.env.VITE_BASE_API_URL);
+console.log('API Key (from App):', import.meta.env.VITE_PRIVATE_API_KEY);
 
 export default App;

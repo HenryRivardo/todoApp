@@ -15,3 +15,5 @@ root.render(
     <BootstrappedApp />
   </StrictMode>
 );
+console.log('Base URL (from App):', import.meta.env.VITE_BASE_API_URL);
+console.log('API Key (from App):', import.meta.env.VITE_PRIVATE_API_KEY);

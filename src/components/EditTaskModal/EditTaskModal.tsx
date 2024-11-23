@@ -1,4 +1,3 @@
-// src/components/EditTaskModal.tsx
 import React, { useState, useEffect } from 'react';
 import styles from './EditTaskModal.module.scss';
 
@@ -19,7 +18,7 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setUpdatedTitle(taskTitle); // Set ulang title saat modal dibuka
+      setUpdatedTitle(taskTitle);
     }
   }, [isOpen, taskTitle]);
 
@@ -27,17 +26,14 @@ const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
   const handleSave = () => {
     if (updatedTitle.trim()) {
-      onSave(updatedTitle); // Kirim data baru ke fungsi `onSave`
+      onSave(updatedTitle);
       onClose();
     }
   };
 
   return (
     <div className={styles['modal-backdrop']} onClick={onClose}>
-      <div
-        className={styles['modal']}
-        onClick={(e) => e.stopPropagation()} // Mencegah penutupan modal saat modal diklik
-      >
+      <div className={styles['modal']} onClick={(e) => e.stopPropagation()}>
         <div className={styles['modal__header']}>
           <h2>Edit Task</h2>
           <button onClick={onClose} className={styles['modal__close-button']}>

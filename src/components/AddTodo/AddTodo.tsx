@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAddTodo } from '../../hooks/useTodos';
-import styles from '@/components/AddTodo/AddTodo.module.scss';
+import { useAddTodo } from '@/hooks/useTodos';
+import styles from './AddTodo.module.scss';
 
 const AddTodo: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -9,8 +9,23 @@ const AddTodo: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      addTodo.mutate(title);
-      setTitle('');
+      const newTodo = {
+        title,
+        completed: false,
+        date: new Date().toISOString(),
+      };
+
+      addTodo.mutate(newTodo, {
+        onSuccess: () => {
+          console.log('Todo added successfully');
+          setTitle('');
+        },
+        onError: (error) => {
+          console.error('Error adding todo:', error);
+        },
+      });
+    } else {
+      console.warn('Title cannot be empty');
     }
   };
 
@@ -21,9 +36,9 @@ const AddTodo: React.FC = () => {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder='Create new task'
-        className='add-todo__input'
+        className={styles['add-todo__input']}
       />
-      <button type='submit' className='add-todo__button'>
+      <button type='submit' className={styles['add-todo__button']}>
         Add
       </button>
     </form>
