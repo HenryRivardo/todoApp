@@ -40,7 +40,7 @@ const TodoList: React.FC = () => {
     }
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     deleteTodo.mutate(id, {
       onSuccess: () => {
         queryClient.setQueryData('todos', (oldData: any) => {

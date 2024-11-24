@@ -1,36 +1,31 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import * as todoApi from '@/api/todoApi';
+import { customAxios } from '@/api/index';
 
 // Helper untuk memperbarui cache React Query
-const updateCache = (queryClient: any, updater: (todos: any) => any) => {
-  queryClient.setQueryData('todos', (oldData: any) => {
-    if (!oldData) return;
-    return {
-      ...oldData,
-      pages: oldData.pages.map((page: any) => ({
-        ...page,
-        todos: updater(page.todos),
-      })),
-    };
-  });
-};
 
 export const useTodos = () => {
   return useInfiniteQuery(
     'todos',
     async ({ pageParam = 1 }) => {
-      const response = await todoApi.getTodos(pageParam);
+      const { data } = await customAxios.get(`/todos?page=${pageParam}`);
 
       // Urutkan todos berdasarkan tanggal secara descending
+      const sortedTodos = Array.isArray(data.todos)
+        ? data.todos.sort(
+            (a: any, b: any) =>
+              new Date(b.date).getTime() - new Date(a.date).getTime()
+          )
+        : [];
+
       return {
-        ...response,
-        todos: response.todos.sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-        ),
+        todos: sortedTodos,
+        hasNextPage: data.hasNextPage,
+        nextPage: data.nextPage,
       };
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
     }
   );
 };
@@ -38,24 +33,35 @@ export const useTodos = () => {
 export const useAddTodo = () => {
   const queryClient = useQueryClient();
 
-  return useMutation(todoApi.addTodo, {
-    onSuccess: (newTodo) => {
-      // Update cache lokal
-      queryClient.setQueryData('todos', (oldData: any) => {
-        if (!oldData) return;
-
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: any, index: number) => {
-            if (index === 0) {
-              return { ...page, todos: [newTodo, ...page.todos] };
-            }
-            return page;
-          }),
-        };
-      });
+  return useMutation(
+    async (newTodo) => {
+      const response = await customAxios.post('/todos', newTodo);
+      return response.data;
     },
-  });
+    {
+      onSuccess: (newTodo) => {
+        queryClient.setQueryData('todos', (oldData: any) => {
+          if (!oldData) return;
+
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: any, index: number) => {
+              if (index === 0) {
+                return {
+                  ...page,
+                  todos: [newTodo, ...page.todos].sort(
+                    (a, b) =>
+                      new Date(b.date).getTime() - new Date(a.date).getTime()
+                  ),
+                };
+              }
+              return page;
+            }),
+          };
+        });
+      },
+    }
+  );
 };
 
 export const useDeleteTodo = () => {

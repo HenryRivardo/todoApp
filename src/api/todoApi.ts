@@ -3,12 +3,12 @@ import { customAxios } from './index';
 // Contoh endpoint: /todos?_sort=date&_order=desc
 export const getTodos = async (pageParam: number = 1) => {
   const response = await customAxios.get(`/todos`, {
-    params: { _page: pageParam, _limit: 20, _sort: 'date', _order: 'desc' },
+    params: { _page: pageParam, _limit: 10, _sort: 'date', _order: 'desc' },
   });
 
   return {
     todos: response.data.todos,
-    nextPage: response.data.length === 20 ? pageParam + 1 : undefined,
+    nextPage: response.data.length === 10 ? pageParam + 1 : undefined,
   };
 };
 
